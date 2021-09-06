@@ -1,0 +1,295 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Stock api",
+		"description": "Stock api",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://127.0.0.1:3001"
+		}
+	],
+	"paths": {
+		"/register": {
+			"post": {
+				"summary": "Register user",
+				"description": "Register user and return a token",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "e",
+						"schema": {
+							"type": "string"
+						},
+						"description": "User email",
+						"required": "true"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Sucess",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RegisterResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Authentication error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Generic error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/stock": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"summary": "Query a stock quote",
+				"description": "Query a stock quote",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "q",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Stock symbol",
+						"required": "true"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Sucess",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StockResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Authentication error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Generic error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/history": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"summary": "User queries history",
+				"description": "User queries history",
+				"responses": {
+					"200": {
+						"description": "Sucess",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/HistoryResponse"
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Authentication error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Generic error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/stats": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"summary": "Most searched stocks",
+				"description": "Most searched stocks. Need to register as superuser",
+				"responses": {
+					"200": {
+						"description": "Sucess",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/StatsResponse"
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Authentication error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Generic error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		},
+		"schemas": {
+			"RegisterResponse": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				}
+			},
+			"StockResponse": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"symbol": {
+						"type": "string"
+					},
+					"open": {
+						"type": "number"
+					},
+					"high": {
+						"type": "number"
+					},
+					"low": {
+						"type": "number"
+					},
+					"close": {
+						"type": "number"
+					}
+				}
+			},
+			"HistoryResponse": {
+				"properties": {
+					"date": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"symbol": {
+						"type": "string"
+					},
+					"open": {
+						"type": "number"
+					},
+					"high": {
+						"type": "number"
+					},
+					"low": {
+						"type": "number"
+					},
+					"close": {
+						"type": "number"
+					}
+				}
+			},
+            "StatsResponse": {
+				"properties": {
+					"stock": {
+						"type": "string"
+					},
+					"times_requested": {
+						"type": "number"
+					}
+				}
+			},
+            "ErrorResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}
