@@ -1,4 +1,4 @@
-# Node.js Challenge
+# Stooq api
 The purpose of this project is querying stock quotes from https://stooq.com. For that, you need to run the following two projects:
 ## Stock-service
 Api for querying stock quotes from https://stooq.com
@@ -38,7 +38,3 @@ Register a valid email using /register route. Use the given token to access the 
 Bearer token must be provided on Authentication header  
 [Bearer example](auth.jpg?raw=true)  
 **After registering an user and getting a token, there is no need to inform user on those 3 routes. User will stay linked to the token until it expires. After that, you should register again to retrieve a new one**
-## Important notes about the Challenge
-- I planned using Sequelize with Postgres database, but it would require the database setup for the evaluators. So, I decided to use a simple local json database instead;  
-- The challenge required to inform user and password authentication, but I choose to use only the jwt token, as it's linked to the user from /register route.  
-- Jwt tokens cannot be invalidated until they expire. Resetting the token would require a blacklist or something like that. So I decided to not create a /reset password route
